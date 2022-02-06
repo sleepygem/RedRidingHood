@@ -7,7 +7,7 @@
 //#include "DirectionalFlipbookDataAsset.h"
 #include "AnimNotify2D.generated.h"
 
-class UDirectionalFlipbookAsset;
+class UDirectionalFlipbookComponent;
 
 /**
  * 
@@ -20,7 +20,7 @@ class REDRIDINGHOOD_API UAnimNotify2D : public UObject
 public:
 
 	UFUNCTION(BlueprintImplementableEvent)
-	bool Received_Notify(UDirectionalFlipbookDataAsset* DirectionalFlipbook);
+	bool Received_Notify(UDirectionalFlipbookComponent* DirectionalFlipbook);
 
-	void Notify(UDirectionalFlipbookDataAsset* DirectionalFlipbook);
+	void Notify(UDirectionalFlipbookComponent* DirectionalFlipbook);
 };

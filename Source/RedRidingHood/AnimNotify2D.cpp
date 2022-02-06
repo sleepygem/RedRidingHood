@@ -3,7 +3,7 @@
 
 #include "AnimNotify2D.h"
 
-void UAnimNotify2D::Notify(UDirectionalFlipbookDataAsset* DirectionalFlipbook)
+void UAnimNotify2D::Notify(UDirectionalFlipbookComponent* DirectionalFlipbook)
 {
 	Received_Notify(DirectionalFlipbook);
 }

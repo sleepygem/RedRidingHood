@@ -67,9 +67,6 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	UPaperFlipbook* GetFlipbookFromAngle(float InAngle) const;
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	void GetAnimNotifiesFromDeltaPositions(const float& PreviousPosition, const float& CurrentPosition, TArray<TSubclassOf<class UAnimNotify2D>>& OutAnimNotifies) const;
-
 private:
 	
 	uint32 SpriteIndexFromAngle(float InAngle) const;
