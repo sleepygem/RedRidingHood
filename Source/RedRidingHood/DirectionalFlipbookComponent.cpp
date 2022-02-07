@@ -32,7 +32,12 @@ void UDirectionalFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTi
 	{
 		for (int32 Index = 0; Index < TriggeredAnimNotifies.Num(); Index++) 
 		{
-			TriggeredAnimNotifies[Index]->Notify(this);
+			UAnimNotify2D* TriggeredNotify = TriggeredAnimNotifies[Index];
+
+			if (TriggeredNotify != nullptr) 
+			{
+				TriggeredNotify->Notify(this);
+			}
 		}
 	}
 }
@@ -47,11 +52,10 @@ void UDirectionalFlipbookComponent::GetAnimNotifiesFromDeltaPositions(const floa
 	//Looping through every current notify, checking if they fall between the animation's previous and current timeline position
 	for (int NotifyIndex = 0; NotifyIndex < CurrentNotifies.Num(); NotifyIndex++) 
 	{
-		const FAnimNotify2DTrigger& Notify = CurrentNotifies[NotifyIndex];
+		const FInstancedAnimNotify2D& Notify = CurrentNotifies[NotifyIndex];
 
 		if (Notify.Time > PreviousPosition && Notify.Time <= CurrentPosition) 
 		{
-
 			if (Notify.InstancedNotify != nullptr) 
 			{
 				OutAnimNotifies.Add(Notify.InstancedNotify);
@@ -74,10 +78,12 @@ void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookD
 	}
 }
 
-TArray<FAnimNotify2DTrigger> UDirectionalFlipbookComponent::GetCurrentNotifies() const
+/*
+TArray<FInstancedAnimNotify2D> UDirectionalFlipbookComponent::GetCurrentNotifies() const
 {
 	return CurrentNotifies;
 }
+*/
 
 void UDirectionalFlipbookComponent::FacePlayerCamera()
 {
@@ -126,8 +132,7 @@ void UDirectionalFlipbookComponent::InstantiateAnimNotifies()
 
 		if (NotifyTrigger.NotifyClass != nullptr)
 		{
-			NotifyTrigger.InstancedNotify = NewObject<UAnimNotify2D>(this, NotifyTrigger.NotifyClass);
-			CurrentNotifies.Add(NotifyTrigger);
+			CurrentNotifies.Add(FInstancedAnimNotify2D(NewObject<UAnimNotify2D>(this, NotifyTrigger.NotifyClass), NotifyTrigger.Time));
 		}
 	}
 }

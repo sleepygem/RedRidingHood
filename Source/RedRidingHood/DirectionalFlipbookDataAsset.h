@@ -28,19 +28,10 @@ struct FAnimNotify2DTrigger
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class UAnimNotify2D> NotifyClass;
 
-	UPROPERTY()
-	UAnimNotify2D* InstancedNotify;
-
-	//Setting instanced notify class
-	void SetNotify(UAnimNotify2D* NewNotify) {
-		InstancedNotify = NewNotify;
-	}
-
 	//Constructor
 	FAnimNotify2DTrigger() 
 	{
 		Time = 0.0f;
-		InstancedNotify = nullptr;
 	}
 };
 

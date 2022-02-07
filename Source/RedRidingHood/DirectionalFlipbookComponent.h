@@ -8,6 +8,36 @@
 #include "DirectionalFlipbookDataAsset.h"
 #include "DirectionalFlipbookComponent.generated.h"
 
+USTRUCT(BlueprintType)
+struct FInstancedAnimNotify2D
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float Time;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UAnimNotify2D* InstancedNotify;
+
+	//Setting instanced notify class
+	void SetNotify(UAnimNotify2D* NewNotify) {
+		InstancedNotify = NewNotify;
+	}
+
+	//Constructor
+	FInstancedAnimNotify2D()
+	{
+		InstancedNotify = nullptr;
+		Time = 0.0f;
+	}
+
+	FInstancedAnimNotify2D(UAnimNotify2D* NewNotify, float NewTime)
+	{
+		InstancedNotify = NewNotify;
+		Time = NewTime;
+	}
+};
+
 /**
  *  Directional Flipbook Component
  */
@@ -30,15 +60,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetDirectionalFlipbook(UDirectionalFlipbookDataAsset* NewDirectionalFlipbook);
 
+	/* - Need to change since FInstancedAnimNotify2D isn't a blueprint type
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TArray<FAnimNotify2DTrigger> GetCurrentNotifies() const;
+	TArray<FInstancedAnimNotify2D> GetCurrentNotifies() const;
+	*/
 
 protected:
 
 	UPROPERTY(Category = Sprite, EditAnywhere, meta = (DisplayThumbnail = "true"))
 	UDirectionalFlipbookDataAsset* SourceDirectionalFlipbook;
 
-	TArray<FAnimNotify2DTrigger> CurrentNotifies;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	TArray<FInstancedAnimNotify2D> CurrentNotifies;
 
 public:
 
