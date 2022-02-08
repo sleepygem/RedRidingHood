@@ -65,12 +65,15 @@ void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookD
 	if (NewDirectionalFlipbook != SourceDirectionalFlipbook) 
 	{
 		SourceDirectionalFlipbook = NewDirectionalFlipbook;
+		SetLooping(NewDirectionalFlipbook->Looping);
 
 		//Get new DirectionalFlipbook's anim notifies and instantiate them
 		InstantiateAnimNotifies(); 
 
 		//Update PaperFlipbook being displayed, based on new DirectionalFlipbook
-		UpdateFlipbookDirection(); 
+		UpdateFlipbookDirection();
+
+		PlayFromStart();
 	}
 }
 

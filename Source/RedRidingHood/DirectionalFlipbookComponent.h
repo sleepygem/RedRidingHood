@@ -38,6 +38,7 @@ protected:
 	UPROPERTY(Category = Sprite, EditAnywhere, meta = (DisplayThumbnail = "true"))
 	UDirectionalFlipbookDataAsset* SourceDirectionalFlipbook;
 
+	UPROPERTY()
 	TArray<FAnimNotify2DTrigger> CurrentNotifies;
 
 public:
