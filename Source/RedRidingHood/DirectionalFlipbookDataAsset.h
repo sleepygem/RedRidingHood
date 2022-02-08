@@ -58,6 +58,9 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	UPaperFlipbook* GetFlipbookFromAngle(float InAngle) const;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool Looping;
+
 private:
 	
 	uint32 SpriteIndexFromAngle(float InAngle) const;
