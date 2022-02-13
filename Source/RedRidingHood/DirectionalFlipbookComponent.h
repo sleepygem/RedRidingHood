@@ -60,10 +60,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetDirectionalFlipbook(UDirectionalFlipbookDataAsset* NewDirectionalFlipbook);
 
-	/* - Need to change since FInstancedAnimNotify2D isn't a blueprint type
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TArray<FInstancedAnimNotify2D> GetCurrentNotifies() const;
-	*/
 
 protected:
 
@@ -73,6 +69,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	TArray<FInstancedAnimNotify2D> CurrentNotifies;
 
+private:
+
+	bool bAnimNotifiesActivated = false;
+
 public:
 
 	virtual void BeginPlay() override;
@@ -81,9 +81,16 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	void GetAnimNotifiesFromDeltaPositions(const float& PreviousPosition, const float& CurrentPosition, TArray<UAnimNotify2D*>& OutAnimNotifies) const;
 
+#if WITH_EDITOR
+
+	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& e);
+
+#endif
+
 protected:
 
 	void FacePlayerCamera();
 	void UpdateFlipbookDirection();
 	void InstantiateAnimNotifies();
+
 };

@@ -53,6 +53,9 @@ public:
 	EDirectionalType DirectionType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float SpriteSize;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FAnimNotify2DTrigger> Notifies;
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
@@ -60,6 +63,14 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	bool Looping;
+
+	UDirectionalFlipbookDataAsset() 
+	{
+		Looping = false;
+		SpriteSize = 1.0f;
+		DirectionType = EDirectionalType::OneDirectional;
+	}
+
 
 private:
 	

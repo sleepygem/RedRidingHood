@@ -5,10 +5,12 @@ void UDirectionalFlipbookComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bAnimNotifiesActivated = true;
+
 	if (SourceDirectionalFlipbook != nullptr) 
 	{
 		//DirectionalFlipbook can be set before runtime, if so we need to instantiate its anim notifies here
-		InstantiateAnimNotifies(); 
+		InstantiateAnimNotifies();
 	}
 }
 
@@ -17,8 +19,8 @@ void UDirectionalFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTi
 	FacePlayerCamera();
 
 	// Check if flipbook needs updated to match rotation
-	UpdateFlipbookDirection(); 
-
+	UpdateFlipbookDirection();
+	
 	const float OldTime = AccumulatedTime;
 
 	// Original PaperFlipbook Tick event, handles animation, rendering etc.
@@ -66,10 +68,14 @@ void UDirectionalFlipbookComponent::GetAnimNotifiesFromDeltaPositions(const floa
 
 void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookDataAsset* NewDirectionalFlipbook)
 {
-	if (NewDirectionalFlipbook != SourceDirectionalFlipbook) 
-	{
+	//if (NewDirectionalFlipbook != SourceDirectionalFlipbook) 
+	//{
 		SourceDirectionalFlipbook = NewDirectionalFlipbook;
 		SetLooping(NewDirectionalFlipbook->Looping);
+
+		float NewScale = NewDirectionalFlipbook->SpriteSize;
+
+		SetRelativeScale3D(FVector(NewScale, NewScale, NewScale));
 
 		//Get new DirectionalFlipbook's anim notifies and instantiate them
 		InstantiateAnimNotifies(); 
@@ -78,15 +84,9 @@ void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookD
 		UpdateFlipbookDirection();
 
 		PlayFromStart();
-	}
+	//}
 }
 
-/*
-TArray<FInstancedAnimNotify2D> UDirectionalFlipbookComponent::GetCurrentNotifies() const
-{
-	return CurrentNotifies;
-}
-*/
 
 void UDirectionalFlipbookComponent::FacePlayerCamera()
 {
@@ -111,31 +111,58 @@ void UDirectionalFlipbookComponent::FacePlayerCamera()
 
 void UDirectionalFlipbookComponent::UpdateFlipbookDirection()
 {
-	SpriteAngle = GetOwner()->GetActorRotation().Yaw - GetComponentRotation().Yaw + 270.0f;
-	UPaperFlipbook* NewFlipbook = SourceDirectionalFlipbook->GetFlipbookFromAngle(UKismetMathLibrary::FWrap(SpriteAngle, 0.0f, 360.0f));
-
-	if (NewFlipbook != SourceFlipbook) 
+	if (SourceDirectionalFlipbook != nullptr) 
 	{
-		const float OldPosition = AccumulatedTime;
-		SetFlipbook(NewFlipbook);
+		if (UGameplayStatics::GetGameInstance(GetWorld())) 
+		{
+			SpriteAngle = GetOwner()->GetActorRotation().Yaw - GetComponentRotation().Yaw + 270.0f;
+		}
+		else 
+		{
+			SpriteAngle = 0.0f;
+		}
 
-		//SetFlipbook resets flipbook's timeline position to 0, so we have to set it back to where it was before
-		AccumulatedTime = OldPosition;
-		CalculateCurrentFrame();
+		UPaperFlipbook* NewFlipbook = SourceDirectionalFlipbook->GetFlipbookFromAngle(UKismetMathLibrary::FWrap(SpriteAngle, 0.0f, 360.0f));
+
+		if (NewFlipbook != SourceFlipbook)
+		{
+			const float OldPosition = AccumulatedTime;
+			SetFlipbook(NewFlipbook);
+
+			//SetFlipbook resets flipbook's timeline position to 0, so we have to set it back to where it was before
+			AccumulatedTime = OldPosition;
+			CalculateCurrentFrame();
+		}
 	}
 }
 
 void UDirectionalFlipbookComponent::InstantiateAnimNotifies()
 {
-	CurrentNotifies.Empty();
-
-	for (int32 Index = 0; Index < SourceDirectionalFlipbook->Notifies.Num(); Index++)
+	if (bAnimNotifiesActivated) 
 	{
-		FAnimNotify2DTrigger NotifyTrigger = SourceDirectionalFlipbook->Notifies[Index];
+		CurrentNotifies.Empty();
 
-		if (NotifyTrigger.NotifyClass != nullptr)
+		for (int32 Index = 0; Index < SourceDirectionalFlipbook->Notifies.Num(); Index++)
 		{
-			CurrentNotifies.Add(FInstancedAnimNotify2D(NewObject<UAnimNotify2D>(this, NotifyTrigger.NotifyClass), NotifyTrigger.Time));
+			FAnimNotify2DTrigger NotifyTrigger = SourceDirectionalFlipbook->Notifies[Index];
+
+			if (NotifyTrigger.NotifyClass != nullptr)
+			{
+				CurrentNotifies.Add(FInstancedAnimNotify2D(NewObject<UAnimNotify2D>(this, NotifyTrigger.NotifyClass), NotifyTrigger.Time));
+			}
 		}
 	}
 }
+
+#if WITH_EDITOR
+
+void UDirectionalFlipbookComponent::PostEditChangeProperty(FPropertyChangedEvent& e)
+{
+	FName PropertyName = (e.Property != NULL) ? e.Property->GetFName() : NAME_None;
+
+	if (SourceDirectionalFlipbook != nullptr) SetDirectionalFlipbook(SourceDirectionalFlipbook);
+
+	Super::PostEditChangeProperty(e);
+}
+
+#endif
