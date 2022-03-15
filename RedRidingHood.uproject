@@ -14,5 +14,11 @@
 				"Paper2D"
 			]
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "ApexDestruction",
+			"Enabled": true
+		}
 	]
 }
