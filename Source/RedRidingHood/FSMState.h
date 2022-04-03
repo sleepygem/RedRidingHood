@@ -29,6 +29,9 @@ public:
 	void OnExit();
 
 	UFUNCTION(BlueprintNativeEvent)
+	void OnReEnter();
+
+	UFUNCTION(BlueprintNativeEvent)
 	void Update(float DeltaTime);
 
 	UFUNCTION(BlueprintNativeEvent)

@@ -42,6 +42,11 @@ void UPlayerStateMachine::PopState()
 		PreviousState->OnExit();
 		PreviousState->MarkPendingKill();
 	}
+
+	if (StateStack.Num() > 0) 
+	{
+		StateStack.Last()->OnReEnter();
+	}
 }
 
 void UPlayerStateMachine::PushState(TSubclassOf<class UFSMState> NewState)

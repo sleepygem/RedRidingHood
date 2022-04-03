@@ -15,6 +15,10 @@ void UFSMState::Update_Implementation(float DeltaTime)
 {
 }
 
+void UFSMState::OnReEnter_Implementation() 
+{
+}
+
 void UFSMState::HandleActionInput_Implementation(FName InputName, EInputEvent InputType)
 {
 }
