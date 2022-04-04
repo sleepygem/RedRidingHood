@@ -68,8 +68,8 @@ void UDirectionalFlipbookComponent::GetAnimNotifiesFromDeltaPositions(const floa
 
 void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookDataAsset* NewDirectionalFlipbook)
 {
-	//if (NewDirectionalFlipbook != SourceDirectionalFlipbook) 
-	//{
+	if (NewDirectionalFlipbook != SourceDirectionalFlipbook) 
+	{
 		SourceDirectionalFlipbook = NewDirectionalFlipbook;
 		SetLooping(NewDirectionalFlipbook->Looping);
 
@@ -84,7 +84,7 @@ void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookD
 		UpdateFlipbookDirection();
 
 		PlayFromStart();
-	//}
+	}
 }
 
 
@@ -160,7 +160,22 @@ void UDirectionalFlipbookComponent::PostEditChangeProperty(FPropertyChangedEvent
 {
 	FName PropertyName = (e.Property != NULL) ? e.Property->GetFName() : NAME_None;
 
-	if (SourceDirectionalFlipbook != nullptr) SetDirectionalFlipbook(SourceDirectionalFlipbook);
+	if (SourceDirectionalFlipbook != nullptr) 
+	{
+		SetLooping(SourceDirectionalFlipbook->Looping);
+
+		float NewScale = SourceDirectionalFlipbook->SpriteSize;
+
+		SetRelativeScale3D(FVector(NewScale, NewScale, NewScale));
+
+		//Get new DirectionalFlipbook's anim notifies and instantiate them
+		InstantiateAnimNotifies();
+
+		//Update PaperFlipbook being displayed, based on new DirectionalFlipbook
+		UpdateFlipbookDirection();
+
+		PlayFromStart();
+	}
 
 	Super::PostEditChangeProperty(e);
 }
