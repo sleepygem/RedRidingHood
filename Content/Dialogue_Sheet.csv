@@ -1,0 +1,11 @@
+---,CharacterIcon,DialogueText,SpeakingSide
+Opening1,Red Happy,"At last!
+We're nearly there!",Left
+Opening2,Red Happy,"Look at us, that dirt path has gotten us filthy!",Left
+Opening3,Yang Happy,It's Market Day…,Right
+Opening4,Yin Happy,The gate should've been open…,Right
+Opening5,Red Happy,"Maybe too many people came, so they closed the gate?",Left
+Opening6,Yang Happy,I guess we'll soon see...,Right
+Water1,Red Happy,"Oh god, we're gonna get soaked!",Left
+Water2,Yang Happy,"Don't be dramatic…
+Just hit [Space] to jump!",Right

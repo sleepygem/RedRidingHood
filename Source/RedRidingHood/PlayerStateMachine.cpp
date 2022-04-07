@@ -90,7 +90,9 @@ void UPlayerStateMachine::HandleDamage(AActor* SourceActor, float IncomingDamage
 
 UFSMState* UPlayerStateMachine::GetCurrentState()
 {
-	return StateStack.Last();
+	if (StateStack.Num() > 0) return StateStack.Last();
+
+	return nullptr;
 }
 
 
