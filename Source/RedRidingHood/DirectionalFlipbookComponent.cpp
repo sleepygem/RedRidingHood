@@ -75,7 +75,7 @@ void UDirectionalFlipbookComponent::SetDirectionalFlipbook(UDirectionalFlipbookD
 
 		float NewScale = NewDirectionalFlipbook->SpriteSize;
 
-		SetRelativeScale3D(FVector(NewScale, NewScale, NewScale));
+		SetRelativeScale3D(FVector(NewScale, 1.0f, NewScale));
 
 		//Get new DirectionalFlipbook's anim notifies and instantiate them
 		InstantiateAnimNotifies(); 
@@ -166,7 +166,7 @@ void UDirectionalFlipbookComponent::PostEditChangeProperty(FPropertyChangedEvent
 
 		float NewScale = SourceDirectionalFlipbook->SpriteSize;
 
-		SetRelativeScale3D(FVector(NewScale, NewScale, NewScale));
+		SetRelativeScale3D(FVector(NewScale, 1.0f, NewScale));
 
 		//Get new DirectionalFlipbook's anim notifies and instantiate them
 		InstantiateAnimNotifies();
